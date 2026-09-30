@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pocket Smart AI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+header {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    padding: 25px 6%;
+}
+
+header h1 {
+    font-size: 30px;
+}
+
+header p {
+    margin-top: 6px;
+    opacity: 0.9;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 25px auto;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+.card h3 {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.amount {
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.income {
+    color: #16a34a;
+}
+
+.expense {
+    color: #dc2626;
+}
+
+.balance {
+    color: #2563eb;
+}
+
+.budget {
+    color: #7c3aed;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    margin-bottom: 20px;
+}
+
+.section h2 {
+    margin-bottom: 18px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #2563eb;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #2563eb;
+    color: white;
+    margin-top: 8px;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.delete-btn {
+    background: #ef4444;
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+.expense-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.expense-info strong {
+    display: block;
+}
+
+.expense-info small {
+    color: #6b7280;
+}
+
+.ai-box {
+    background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+    border-left: 5px solid #7c3aed;
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 1.6;
+}
+
+.progress-container {
+    background: #e5e7eb;
+    height: 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    width: 0%;
+    transition: 0.4s;
+}
+
+.chart {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    height: 180px;
+    padding-top: 20px;
+}
+
+.bar-container {
+    flex: 1;
+    text-align: center;
+}
+
+.bar {
+    width: 100%;
+    background: linear-gradient(#2563eb, #7c3aed);
+    border-radius: 5px 5px 0 0;
+    min-height: 5px;
+}
+
+.bar-container small {
+    display: block;
+    margin-top: 7px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #6b7280;
+}
+
+@media(max-width: 850px) {
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 500px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .container {
+        width: 94%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💰 Pocket Smart AI</h1>
+    <p>Your Smart Budget & Recommendation Assistant</p>
+</header>
+
+<div class="container">
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Total Income</h3>
+            <div class="amount income" id="incomeDisplay">₹0</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Expenses</h3>
+            <div class="amount expense" id="expenseDisplay">₹0</div>
+        </div>
+
+        <div class="card">
+            <h3>Remaining Balance</h3>
+            <div class="amount balance" id="balanceDisplay">₹0</div>
+        </div>
+
+        <div class="card">
+            <h3>Monthly Budget</h3>
+            <div class="amount budget" id="budgetDisplay">₹0</div>
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <!-- Income & Budget -->
+        <div>
+
+            <div class="section">
+                <h2>💵 Set Your Income</h2>
+
+                <input
+                    type="number"
+                    id="incomeInput"
+                    placeholder="Enter monthly income"
+                >
+
+                <button onclick="setIncome()">
+                    Save Income
+                </button>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Set Monthly Budget</h2>
+
+                <input
+                    type="number"
+                    id="budgetInput"
+                    placeholder="Enter monthly budget"
+                >
+
+                <button onclick="setBudget()">
+                    Save Budget
+                </button>
+
+                <div class="progress-container">
+                    <div class="progress" id="budgetProgress"></div>
+                </div>
+
+                <p id="budgetMessage">
+                    No budget set yet.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Add Expense -->
+        <div class="section">
+
+            <h2>➕ Add Expense</h2>
+
+            <input
+                type="text"
+                id="expenseName"
+                placeholder="Expense name"
+            >
+
+            <input
+                type="number"
+                id="expenseAmount"
+                placeholder="Amount"
+            >
+
+            <select id="expenseCategory">
+                <option value="Food">🍔 Food</option>
+                <option value="Transport">🚗 Transport</option>
+                <option value="Shopping">🛍️ Shopping</option>
+                <option value="Bills">💡 Bills</option>
+                <option value="Education">📚 Education</option>
+                <option value="Entertainment">🎬 Entertainment</option>
+                <option value="Health">🏥 Health</option>
+                <option value="Other">📦 Other</option>
+            </select>
+
+            <button onclick="addExpense()">
+                Add Expense
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- AI Assistant -->
+    <div class="section">
+
+        <h2>🤖 Pocket Smart AI</h2>
+
+        <div class="ai-box" id="aiMessage">
+            Welcome! Add your income, budget and expenses.
+            I'll analyze your spending and provide smart suggestions.
+        </div>
+
+        <button onclick="getRecommendation()">
+            ✨ Get Smart Recommendation
+        </button>
+
+    </div>
+
+    <!-- Expenses -->
+    <div class="section">
+
+        <h2>🧾 Recent Expenses</h2>
+
+        <div class="expense-list" id="expenseList">
+            <p>No expenses added yet.</p>
+        </div>
+
+    </div>
+
+    <!-- Analytics -->
+    <div class="section">
+
+        <h2>📊 Spending Analysis</h2>
+
+        <div class="chart" id="chart"></div>
+
+    </div>
+
+    <!-- Savings Goal -->
+    <div class="section">
+
+        <h2>🎯 Savings Goal</h2>
+
+        <input
+            type="text"
+            id="goalName"
+            placeholder="Example: New Laptop"
+        >
+
+        <input
+            type="number"
+            id="goalAmount"
+            placeholder="Target amount"
+        >
+
+        <button onclick="setGoal()">
+            Set Goal
+        </button>
+
+        <p id="goalDisplay" style="margin-top:15px;">
+            No savings goal set.
+        </p>
+
+    </div>
+
+</div>
+
+<footer>
+    Pocket Smart AI © 2026 | Smart Budget & Recommendation Assistant
+</footer>
+
+
+<script>
+
+let income = Number(localStorage.getItem("income")) || 0;
+let budget = Number(localStorage.getItem("budget")) || 0;
+
+let expenses =
+    JSON.parse(localStorage.getItem("expenses")) || [];
+
+let goal =
+    JSON.parse(localStorage.getItem("goal")) || null;
+
+
+// -----------------------------
+// SAVE DATA
+// -----------------------------
+
+function saveData() {
+
+    localStorage.setItem("income", income);
+
+    localStorage.setItem("budget", budget);
+
+    localStorage.setItem(
+        "expenses",
+        JSON.stringify(expenses)
+    );
+
+    localStorage.setItem(
+        "goal",
+        JSON.stringify(goal)
+    );
+}
+
+
+// -----------------------------
+// CURRENCY
+// -----------------------------
+
+function money(value) {
+
+    return "₹" + Number(value).toLocaleString("en-IN");
+
+}
+
+
+// -----------------------------
+// SET INCOME
+// -----------------------------
+
+function setIncome() {
+
+    let value =
+        Number(document.getElementById("incomeInput").value);
+
+    if(value <= 0) {
+
+        alert("Please enter a valid income.");
+
+        return;
+    }
+
+    income = value;
+
+    saveData();
+
+    updateUI();
+
+    document.getElementById("incomeInput").value = "";
+
+}
+
+
+// -----------------------------
+// SET BUDGET
+// -----------------------------
+
+function setBudget() {
+
+    let value =
+        Number(document.getElementById("budgetInput").value);
+
+    if(value <= 0) {
+
+        alert("Please enter a valid budget.");
+
+        return;
+    }
+
+    budget = value;
+
+    saveData();
+
+    updateUI();
+
+    document.getElementById("budgetInput").value = "";
+
+}
+
+
+// -----------------------------
+// ADD EXPENSE
+// -----------------------------
+
+function addExpense() {
+
+    let name =
+        document.getElementById("expenseName").value.trim();
+
+    let amount =
+        Number(document.getElementById("expenseAmount").value);
+
+    let category =
+        document.getElementById("expenseCategory").value;
+
+
+    if(name === "" || amount <= 0) {
+
+        alert("Please enter a valid expense.");
+
+        return;
+    }
+
+
+    let expense = {
+
+        id: Date.now(),
+
+        name: name,
+
+        amount: amount,
+
+        category: category,
+
+        date: new Date().toLocaleDateString("en-IN")
+
+    };
+
+
+    expenses.push(expense);
+
+    saveData();
+
+    updateUI();
+
+    document.getElementById("expenseName").value = "";
+
+    document.getElementById("expenseAmount").value = "";
+
+}
+
+
+// -----------------------------
+// DELETE EXPENSE
+// -----------------------------
+
+function deleteExpense(id) {
+
+    expenses =
+        expenses.filter(expense => expense.id !== id);
+
+    saveData();
+
+    updateUI();
+
+}
+
+
+// -----------------------------
+// TOTAL EXPENSE
+// -----------------------------
+
+function totalExpenses() {
+
+    return expenses.reduce(
+        (total, expense) =>
+            total + Number(expense.amount),
+        0
+    );
+
+}
+
+
+// -----------------------------
+// UPDATE DASHBOARD
+// -----------------------------
+
+function updateUI() {
+
+    let total = totalExpenses();
+
+    let balance = income - total;
+
+
+    document.getElementById("incomeDisplay")
+        .innerText = money(income);
+
+    document.getElementById("expenseDisplay")
+        .innerText = money(total);
+
+    document.getElementById("balanceDisplay")
+        .innerText = money(balance);
+
+    document.getElementById("budgetDisplay")
+        .innerText = money(budget);
+
+
+    updateBudgetProgress();
+
+    displayExpenses();
+
+    createChart();
+
+    displayGoal();
+
+}
+
+
+// -----------------------------
+// BUDGET PROGRESS
+// -----------------------------
+
+function updateBudgetProgress() {
+
+    let total = totalExpenses();
+
+    let progress = 0;
+
+    if(budget > 0) {
+
+        progress =
+            Math.min((total / budget) * 100, 100);
+
+    }
+
+
+    document.getElementById("budgetProgress")
+        .style.width = progress + "%";
+
+
+    let message =
+        document.getElementById("budgetMessage");
+
+
+    if(budget === 0) {
+
+        message.innerText =
+            "No budget set yet.";
+
+        return;
+    }
+
+
+    if(total > budget) {
+
+        message.innerText =
+            "⚠️ You have exceeded your monthly budget.";
+
+        message.style.color = "#dc2626";
+
+    } else {
+
+        let remaining = budget - total;
+
+        message.innerText =
+            "You have " +
+            money(remaining) +
+            " remaining in your budget.";
+
+        message.style.color = "#16a34a";
+
+    }
+
+}
+
+
+// -----------------------------
+// DISPLAY EXPENSES
+// -----------------------------
+
+function displayExpenses() {
+
+    let list =
+        document.getElementById("expenseList");
+
+
+    if(expenses.length === 0) {
+
+        list.innerHTML =
+            "<p>No expenses added yet.</p>";
+
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    expenses
+        .slice()
+        .reverse()
+        .forEach(expense => {
+
+            let item =
+                document.createElement("div");
+
+            item.className =
+                "expense-item";
+
+
+            item.innerHTML = `
+
+                <div class="expense-info">
+
+                    <strong>
+                        ${escapeHTML(expense.name)}
+                    </strong>
+
+                    <small>
+                        ${expense.category}
+                        •
+                        ${expense.date}
+                    </small>
+
+                </div>
+
+                <div>
+
+                    <strong style="color:#dc2626">
+                        -${money(expense.amount)}
+                    </strong>
+
+                    <br>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteExpense(${expense.id})"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(item);
+
+        });
+
+}
+
+
+// -----------------------------
+// ESCAPE HTML
+// -----------------------------
+
+function escapeHTML(text) {
+
+    let div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+// -----------------------------
+// AI RECOMMENDATION
+// -----------------------------
+
+function getRecommendation() {
+
+    let total = totalExpenses();
+
+    let balance = income - total;
+
+    let message =
+        document.getElementById("aiMessage");
+
+
+    if(income === 0) {
+
+        message.innerHTML =
+            "💡 Start by entering your monthly income.";
+
+        return;
+    }
+
+
+    if(total === 0) {
+
+        message.innerHTML =
+            "🌟 You haven't recorded any expenses yet. " +
+            "Add your expenses so I can understand your spending habits.";
+
+        return;
+    }
+
+
+    let percentage =
+        income > 0
+        ? (total / income) * 100
+        : 0;
+
+
+    let categoryTotals = {};
+
+
+    expenses.forEach(expense => {
+
+        if(!categoryTotals[expense.category]) {
+
+            categoryTotals[expense.category] = 0;
+
+        }
+
+        categoryTotals[expense.category] +=
+            Number(expense.amount);
+
+    });
+
+
+    let highestCategory = "";
+
+    let highestAmount = 0;
+
+
+    for(let category in categoryTotals) {
+
+        if(categoryTotals[category] > highestAmount) {
+
+            highestAmount =
+                categoryTotals[category];
+
+            highestCategory =
+                category;
+
+        }
+
+    }
+
+
+    let recommendation = "";
+
+
+    if(budget > 0 && total > budget) {
+
+        recommendation =
+            `⚠️ You have exceeded your budget by
+            ${money(total - budget)}.
+            Consider reducing your spending in
+            <strong>${highestCategory}</strong>.`;
+
+    }
+
+    else if(percentage > 80) {
+
+        recommendation =
+            `⚠️ You have already used
+            ${percentage.toFixed(0)}% of your income.
+            Try limiting non-essential spending.`;
+
+    }
+
+    else if(percentage > 60) {
+
+        recommendation =
+            `💡 You have used
+            ${percentage.toFixed(0)}% of your income.
+            Keep monitoring your spending,
+            especially in <strong>${highestCategory}</strong>.`;
+
+    }
+
+    else {
+
+        recommendation =
+            `✅ Your current spending is within a
+            reasonable range.
+            Your highest spending category is
+            <strong>${highestCategory}</strong>.
+            Keep maintaining your budget!`;
+
+    }
+
+
+    if(balance > 0) {
+
+        recommendation +=
+            `<br><br>
+            💰 Current available balance:
+            <strong>${money(balance)}</strong>.`;
+
+    }
+
+
+    message.innerHTML =
+        recommendation;
+
+}
+
+
+// -----------------------------
+// CHART
+// -----------------------------
+
+function createChart() {
+
+    let chart =
+        document.getElementById("chart");
+
+
+    chart.innerHTML = "";
+
+
+    if(expenses.length === 0) {
+
+        chart.innerHTML =
+            "<p>No spending data available.</p>";
+
+        return;
+    }
+
+
+    let categories = {};
+
+
+    expenses.forEach(expense => {
+
+        if(!categories[expense.category]) {
+
+            categories[expense.category] = 0;
+
+        }
+
+        categories[expense.category] +=
+            Number(expense.amount);
+
+    });
+
+
+    let values =
+        Object.values(categories);
+
+    let max =
+        Math.max(...values);
+
+
+    Object.entries(categories)
+        .forEach(([category, amount]) => {
+
+            let container =
+                document.createElement("div");
+
+            container.className =
+                "bar-container";
+
+
+            let height =
+                (amount / max) * 140;
+
+
+            container.innerHTML = `
+
+                <div
+                    class="bar"
+                    style="height:${height}px"
+                    title="${money(amount)}"
+                ></div>
+
+                <small>
+                    ${category}
+                </small>
+
+            `;
+
+
+            chart.appendChild(container);
+
+        });
+
+}
+
+
+// -----------------------------
+// SAVINGS GOAL
+// -----------------------------
+
+function setGoal() {
+
+    let name =
+        document.getElementById("goalName").value.trim();
+
+    let amount =
+        Number(document.getElementById("goalAmount").value);
+
+
+    if(name === "" || amount <= 0) {
+
+        alert("Please enter a valid goal.");
+
+        return;
+    }
+
+
+    goal = {
+
+        name: name,
+
+        amount: amount
+
+    };
+
+
+    saveData();
+
+    displayGoal();
+
+
+    document.getElementById("goalName").value = "";
+
+    document.getElementById("goalAmount").value = "";
+
+}
+
+
+// -----------------------------
+// DISPLAY GOAL
+// -----------------------------
+
+function displayGoal() {
+
+    let element =
+        document.getElementById("goalDisplay");
+
+
+    if(!goal) {
+
+        element.innerText =
+            "No savings goal set.";
+
+        return;
+    }
+
+
+    let balance =
+        Math.max(income - totalExpenses(), 0);
+
+
+    let percentage =
+        Math.min(
+            (balance / goal.amount) * 100,
+            100
+        );
+
+
+    element.innerHTML = `
+
+        🎯 <strong>${escapeHTML(goal.name)}</strong>
+
+        <br>
+
+        Target:
+        ${money(goal.amount)}
+
+        <br>
+
+        Available:
+        ${money(balance)}
+
+        <br><br>
+
+        <div class="progress-container">
+
+            <div
+                class="progress"
+                style="width:${percentage}%"
+            ></div>
+
+        </div>
+
+        ${percentage.toFixed(0)}% of goal
+
+    `;
+
+}
+
+
+// -----------------------------
+// INITIALIZE
+// -----------------------------
+
+updateUI();
+
+</script>
+
+</body>
+</html>

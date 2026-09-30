@@ -1,1 +1,12 @@
 Project Testing Phase
+Test the application systematically.
+Unit Testing — Test individual functions/modules.
+Integration Testing — Test communication between modules.
+System Testing — Test the complete application.
+UI Testing — Check usability and responsiveness.
+AI Testing — Evaluate recommendation accuracy and relevance.
+Security Testing — Check authentication and data protection.
+Performance Testing — Check response time and stability.
+User Acceptance Testing — Collect feedback from intended users.
+Fix identified bugs and perform regression testing.
+

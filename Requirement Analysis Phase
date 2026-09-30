@@ -1,1 +1,19 @@
 Requirement Analysis Phase
+Identify the main problem: difficulty in budgeting and making affordable purchase decisions.
+Identify target users such as students, young professionals, and families.
+Gather functional requirements:
+User registration/login
+Income and expense management
+Budget creation
+Expense categorization
+AI-based recommendations
+Spending analysis
+Notifications/alerts
+Gather non-functional requirements:
+Security
+Privacy
+Usability
+Performance
+Reliability
+Define hardware/software requirements.
+Identify project constraints and assumptions
